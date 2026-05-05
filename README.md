@@ -4,7 +4,7 @@
 
 <h1>Windows 365 Hybrid Platform</h1>
 
-<p><strong>The Strategic Foundation for Enterprise End-User Computing (EUC), Hybrid Identity Integration, and Cloud PC Lifecycle Orchestration using Infrastructure as Code</strong></p>
+<p><strong>The Strategic Foundation for Enterprise End-User Computing (EUC), Hybrid Identity Integration, and Cloud PC Lifecycle Orchestration.</strong></p>
 
 [![Standard: EUC-Excellence](https://img.shields.io/badge/Standard-EUC--Excellence-blue.svg?style=for-the-badge&labelColor=000000)]()
 [![Status: Production--Ready](https://img.shields.io/badge/Status-Production--Ready-emerald.svg?style=for-the-badge&labelColor=000000)]()
@@ -13,7 +13,7 @@
 <br/>
 
 > **"Identity is the new perimeter; the Cloud PC is the new workspace."** 
-> Windows 365 Hybrid (Hybrid-PC) is an enterprise-grade platform designed to provide a secure, measurable, and highly automated foundation for global hybrid workplace transformation. It orchestrates the complex lifecycle of cloud-based endpoints—from simulated AD-to-AAD identity synchronization and automated Cloud PC provisioning to real-time performance monitoring, hybrid networking connectivity, and unified Intune-based governance. By providing a centralized command center with unified workspace-as-code blueprints, automated provisioning pipelines, and immutable device logs, it enables organizations to eliminate legacy VDI complexity, ensure secure remote access, and drive rapid digital transformation across the entire enterprise ecosystem.
+> **Windows 365 Hybrid** is an enterprise-grade platform designed to provide a secure, measurable, and highly automated foundation for global hybrid workplace transformation. It orchestrates the complex lifecycle of cloud-based endpoints—from identity synchronization and automated Cloud PC provisioning to real-time performance monitoring and Intune-based governance.
 
 </div>
 
@@ -23,153 +23,260 @@
 
 Legacy VDI and fragmented remote access solutions are strategic operational liabilities; lack of a unified hybrid workspace model is a primary barrier to employee productivity. Organizations fail to scale their hybrid workforce not because of a lack of hardware, but because of fragmented identity standards, lack of automated device lifecycle management, and an inability to monitor user experience with operational precision.
 
-This platform provides the **Hybrid Workspace Intelligence Plane**. It implements a complete **Enterprise EUC-as-Code Framework**—from modular Identity and Provisioning engines to specialized Networking and Governance hubs. By operationalizing Cloud PC delivery as a primary architectural pillar, it ensures that your global workforce is not just "connected," but continuously optimized and delivered with strategic performance-aligned precision.
+This platform provides the **Hybrid Workspace Intelligence Plane**. It implements a complete **Enterprise EUC-as-Code Framework**, enabling IT Operations and Security teams to manage the modern workspace as a first-class citizen. By automating the provisioning of Windows 365 Cloud PCs and orchestrating real-time compliance policies via Microsoft Intune, we ensure that every organizational endpoint—from contractor laptops to executive desktops—is secure by default, audited for history, and strictly aligned with institutional Zero-Trust standards.
 
 ---
 
-## 🏛️ Core Platform Pillars
+## 📐 Architecture Storytelling: Principal Reference Models
 
-1. **Hybrid Identity Engine**: High-performance simulation of AD Connect synchronization, bridging on-premises Active Directory with Azure AD (Entra ID).
-2. **Cloud PC Provisioning Factory**: Carrier-grade engine for orchestrating the lifecycle of Windows 365 Business and Enterprise Cloud PCs.
-3. **Endpoint Governance Hub**: Intelligent orchestration of Intune compliance policies, configuration profiles, and device health validation.
-4. **Hybrid Network Topology**: Advanced modeling of virtual networks, VPN/DirectConnect connectivity, and secure hybrid access paths.
-5. **EUC Performance Analytics**: Real-time measurement of user session latency, connection success rates, and device utilization trends.
-6. **Unified Workspace Dashboard**: Deep observability into identity health, device compliance distribution, and fleet-wide cost modeling.
+### 1. Principal Architecture: Global Windows 365 Hybrid & EUC Control Plane
+This diagram illustrates the end-to-end flow from hybrid identity synchronization and secure networking to Cloud PC provisioning, Intune governance, and institutional EUC auditing.
 
----
+```mermaid
+graph LR
+    %% Subgraph Definitions
+    subgraph IdentityPlane["Hybrid Identity Hub"]
+        direction TB
+        AD["On-Prem Active Directory"]
+        Connect["Entra ID Connect"]
+        Entra["Microsoft Entra ID (MFA)"]
+    end
 
-## 📐 High-Level Reference Architecture
+    subgraph IntelligenceEngine["EUC Intelligence Hub"]
+        direction TB
+        API["FastAPI EUC Gateway"]
+        Provisioner["Cloud PC Provisioning Engine"]
+        Manager["Endpoint Manager (Intune) Hub"]
+        Validator["Compliance & Health Hub"]
+    end
 
-### Enterprise Windows 365 Hybrid Integration
+    subgraph ComputePlane["Windows 365 Fabric"]
+        direction TB
+        CloudPC["Enterprise Cloud PCs"]
+        ANC["Azure Network Connection"]
+        Profile["FSLogix Profile Containers"]
+    end
 
-**Business Purpose:**  
-Provides a secure, fully-managed End-User Computing (EUC) platform that integrates Windows 365 Cloud PCs with on-premises infrastructure. It enforces Zero Trust conditional access, centralizes device governance via Intune, and automates infrastructure delivery through Terraform.
+    subgraph OperationsHub["Institutional EUC Hub"]
+        direction TB
+        Scorecard["Fleet Health Scorecard"]
+        Analytics["User Experience (DEX) Stats"]
+        Audit["Forensic Device Metadata Lake"]
+    end
+
+    subgraph DevOps["EUC-as-Code Orchestration"]
+        direction TB
+        TF["Terraform EUC Modules"]
+        VNet["Hybrid Virtual Networking"]
+        Defender["XDR (Defender for Endpoint)"]
+    end
+
+    %% Flow Arrows
+    IdentityPlane -->|1. Sync Identity| API
+    API -->|2. Request Provision| Provisioner
+    Provisioner -->|3. Establish Network| ANC
+    ANC -->|4. Deploy Resource| CloudPC
+    
+    CloudPC -->|5. Apply Config| Manager
+    Manager -->|6. Verify Compliance| Validator
+    Validator -->|7. Secure Session| Defender
+    
+    API -->|8. Visualize Health| Scorecard
+    Scorecard -->|9. Monitor DEX| Analytics
+    Scorecard -->|10. Record Event| Audit
+    
+    TF -->|11. Provision Hub| IntelligenceEngine
+    VNet -->|12. Connect On-Prem| ANC
+    Profile -->|13. Roam User Data| CloudPC
+
+    %% Styling
+    classDef identity fill:#f5f5f5,stroke:#616161,stroke-width:2px;
+    classDef intel fill:#e1f5fe,stroke:#01579b,stroke-width:2px;
+    classDef compute fill:#ede7f6,stroke:#311b92,stroke-width:2px;
+    classDef ops fill:#e0f2f1,stroke:#004d40,stroke-width:2px;
+    classDef devops fill:#fffde7,stroke:#f57f17,stroke-width:2px;
+
+    class IdentityPlane identity;
+    class IntelligenceEngine intel;
+    class ComputePlane compute;
+    class OperationsHub ops;
+    class DevOps devops;
+```
+
+### 2. The Cloud PC Lifecycle Flow
+The continuous path of a virtual workspace from initial licensing and provisioning to active management, security hardening, and forensic retirement.
+
+```mermaid
+graph LR
+    License["License Assign"] --> Provision["Provision Cloud PC"]
+    Provision --> Configure["Apply Config (Intune)"]
+    Configure --> Manage["Active Manage & Monitor"]
+    Manage --> Retire["De-provision & Wipe"]
+```
+
+### 3. Hybrid Identity Synchronization Flow
+Strategically bridging on-premises Active Directory with Microsoft Entra ID (Azure AD) to enable seamless, single-sign-on access to virtualized corporate resources.
+
+```mermaid
+graph LR
+    AD["On-Prem AD User"] --> Sync["Entra ID Connect"]
+    Sync --> Cloud["Entra ID Identity"]
+    Cloud --> Auth["Seamless SSO to W365"]
+```
+
+### 4. Secure Hybrid Networking Topology
+Orchestrating the critical line-of-sight between Cloud PCs in Azure and on-premises domain controllers using Azure Network Connections (ANC) and VPC injection.
+
+```mermaid
+graph LR
+    CloudPC["Cloud PC Subnet"] --> ANC["Azure Network Connection"]
+    ANC --> ER["ExpressRoute / VPN"]
+    ER --> DC["On-Prem Domain Controller"]
+```
+
+### 5. Intune Policy & Compliance Hub
+Automating the deployment of Configuration Profiles (Settings) and Compliance Policies (Gates) to ensure every Cloud PC meets the enterprise security baseline.
 
 ```mermaid
 graph TD
-    subgraph "DevOps & IaC"
-        GitHub[GitHub Actions / Repos]
-        Terraform[Terraform / Bicep Modules]
-        GitHub --> Terraform
-    end
-
-    subgraph "Identity & Access"
-        AD[On-Premises Active Directory]
-        ADConnect[Entra ID Connect]
-        Entra[Microsoft Entra ID]
-        AD -->|Sync| ADConnect
-        ADConnect --> Entra
-    end
-
-    subgraph "Networking & Edge"
-        ExpressRoute[ExpressRoute / VPN Gateway]
-        HubVNet[Hybrid Virtual Network]
-        ExpressRoute --> HubVNet
-    end
-
-    subgraph "Compute & Platform (EUC)"
-        Intune[Microsoft Intune / Endpoint Manager]
-        W365[Windows 365 Enterprise Cloud PCs]
-        W365 -->|Network Injection| HubVNet
-        Intune -.->|MDM / Profiles| W365
-    end
-
-    subgraph "Data Layer"
-        AzFiles[(Azure Files / FSLogix)]
-        OneDrive[(OneDrive for Business)]
-        W365 -->|Profile Roaming| AzFiles
-        W365 -->|User Data| OneDrive
-    end
-
-    subgraph "Security"
-        CondAccess[Conditional Access & MFA]
-        Defender[Defender for Endpoint]
-        Entra --> CondAccess
-        CondAccess -.->|Gating| W365
-        W365 --> Defender
-    end
-
-    subgraph "Observability"
-        EndpointAnalytics[Intune Endpoint Analytics]
-        Monitor[Azure Monitor & Log Analytics]
-        W365 -.-> EndpointAnalytics
-        W365 -.-> Monitor
-        HubVNet -.-> Monitor
-    end
-
-    Terraform -.-> HubVNet
-    Terraform -.-> AzFiles
-    Terraform -.-> Intune
+    Hub["Intune Management Hub"] --> Config["Configuration Profile"]
+    Hub --> Compliance["Compliance Policy"]
+    Config --> Device["Enforced OS Settings"]
+    Compliance --> Access["Gated Resource Access"]
 ```
 
-**Key Components:**
-- **Hybrid Identity:** Utilizes Entra ID Connect to synchronize on-premises Active Directory accounts, enabling Hybrid Azure AD join for seamless Cloud PC authentication.
-- **Windows 365 Enterprise:** Hosts persistent, user-dedicated Cloud PCs that are directly injected into the Azure Virtual Network via Azure Network Connections (ANC).
-- **Microsoft Intune:** Centralized Mobile Device Management (MDM) plane for pushing configuration profiles, applications, and compliance policies to the Cloud PCs.
-- **Azure Files & FSLogix:** Highly available, SMB-based file storage dynamically mounting user profiles to ensure persistent experiences across ephemeral sessions if required.
-- **Conditional Access & Defender:** Enforces strict Zero-Trust gating (MFA, compliant device checks) before a user can connect, backed by real-time XDR scanning from Defender for Endpoint.
-- **ExpressRoute / VPN Gateway:** Provides the critical line-of-sight required for Cloud PCs to reach on-premises domain controllers and internal line-of-business applications.
+### 6. FSLogix & Profile Roaming Architecture
+Integrating Azure Files or NetApp Files to ensure persistent, high-performance user profiles that roam seamlessly between persistent and non-persistent virtual sessions.
 
-**How this maps to IaC:**
-- **`module.network`:** Provisions the Azure Virtual Network, Subnets, Network Security Groups, and VPN/ExpressRoute Gateways required for ANC.
-- **`module.identity`:** Configures Azure AD Domain Services or facilitates Hybrid network routing for AD Connect synchronizations.
-- **`module.w365`:** Defines the Windows 365 Provisioning Policies, Azure Network Connections, and assigns user licenses.
-- **`module.intune`:** Automates the deployment of Intune compliance policies, configuration profiles, and application assignments via Microsoft Graph API.
-- **`module.storage`:** Provisions the Azure Storage Account and Azure Files share with AD integration for FSLogix profile containers.
+```mermaid
+graph LR
+    User["User Sign-in"] --> Mount["VHDX Mount (FSLogix)"]
+    Mount --> Store["Azure Files (SMB)"]
+    Store --> Profile["Persistent Desktop Experience"]
+```
+
+### 7. Zero-Trust Conditional Access Flow
+Enforcing real-time, context-aware gating (MFA, Device Compliance, IP Location) before a user is permitted to establish a session with their Cloud PC.
+
+```mermaid
+graph TD
+    Request["Connection Request"] --> CA["Conditional Access"]
+    CA -->|MFA| Gate["Identity Verified"]
+    CA -->|Compliance| Gate["Device Verified"]
+    Gate --> Session["Secure W365 Session"]
+```
+
+### 8. Institutional EUC Health Scorecard
+Grading organizational performance based on key indicators: Deployment Velocity, Compliance Adherence, and User Experience (DEX) Latency.
+
+```mermaid
+graph TD
+    Post["EUC Health: 94%"] --> Risk["Critical Latency: 6%"]
+    Post --- C1["Compliance (99%)"]
+    Post --- C2["Sign-in Speed (12s)"]
+```
+
+### 9. Identity & RBAC for EUC Governance
+Managing fine-grained access to Intune policies, provisioning queues, and device logs between Intune Admins, Desktop Engineers, and Support Teams.
+
+```mermaid
+graph TD
+    Admin["Intune Admin"] --> Policy["Full Policy Control"]
+    SRE["Desktop SRE"] --> Queue["Manage Provisioning"]
+    Support["Helpdesk"] --> Remote["Device Remote Actions"]
+```
+
+### 10. IaC Deployment: EUC-as-Code Framework
+Using Terraform to deploy and manage the versioned distribution of the EUC control plane, network connectors, and profile storage infrastructure.
+
+```mermaid
+graph LR
+    HCL["Infrastructure Code"] --> TF["Terraform Apply"]
+    TF --> Engine["EUC Control Plane Hub"]
+    Engine --> Clusters["High-Availability Fleet"]
+```
+
+### 11. Metadata Lake for Forensic Device Audit
+Storing long-term records of every device sign-in, configuration change, and remediation event for institutional investigation and compliance.
+
+```mermaid
+graph LR
+    Event["Device Event"] --> Stream["Forensic Stream"]
+    Stream --> Lake["EUC Metadata Lake"]
+    Lake --> Trends["Fleet Compliance Trends"]
+```
+
+---
+
+## 🏛️ Core EUC Pillars
+
+1.  **Unified Hybrid Identity**: Seamlessly bridging on-prem Active Directory and Entra ID for a frictionless SSO experience.
+2.  **Automated Workspace Lifecycle**: Moving from manual imaging to rapid, policy-driven Cloud PC provisioning.
+3.  **Modern Device Management**: Centralizing all endpoint governance through Microsoft Intune (MDM/MAM).
+4.  **Zero-Trust Connectivity**: Hard-fencing workspace access based on real-time identity and device health signals.
+5.  **Persistent Experience Performance**: Leveraging FSLogix and Azure Files for ultra-fast, roaming user profiles.
+6.  **Full Auditability**: Immutable recording of every workspace interaction and configuration change for institutional record-keeping.
 
 ---
 
 ## 🛠️ Technical Stack & Implementation
 
-### Platform Engine & APIs
-- **Framework**: Python 3.11+ / FastAPI.
-- **Identity Engine**: High-performance simulation of AD Connect bridging on-prem AD and Entra ID.
-- **Provisioning Engine**: Carrier-grade orchestration of Windows 365 Cloud PC lifecycle.
-- **Device Hub**: Intelligent management of Intune compliance and configuration profiles.
-- **Networking Hub**: Advanced modeling of hybrid connectivity (VNet, VPN, DirectConnect).
-- **Cost Engine**: Real-time estimation of Windows 365 licensing and usage costs.
-- **Cache**: Redis for session tracking and real-time device status updates.
-- **Persistence**: PostgreSQL for fleet metadata, identity objects, and audit trails.
-- **Observability**: Prometheus/Grafana integration for workplace factory monitoring.
+### EUC Engine & APIs
+*   **Framework**: Python 3.11+ / FastAPI.
+*   **Provisioning Core**: Custom logic for orchestrating Windows 365 provisioning policies and ANC validation.
+*   **Identity Orchestrator**: Integration with Entra ID Connect and Microsoft Graph for user/group management.
+*   **Compliance Hub**: Intelligent engine for monitoring Intune policy adherence and health attestation.
+*   **State Management**: PostgreSQL (Metadata Lake) and Redis (Device Session Cache).
 
-### Frontend (Hybrid Command Center)
-- **Framework**: React 18 / Vite.
-- **Theme**: Slate / Cyan (Modern EUC & Identity aesthetic).
-- **Visualization**: Recharts for session trends and device compliance metrics.
+### EUC Dashboard (UI)
+*   **Framework**: React 18 / Vite.
+*   **Theme**: Slate, Cyan, Indigo (Modern operational aesthetic).
+*   **Visualization**: Recharts for fleet compliance heatmaps, session latency trends, and license utilization.
 
-### Infrastructure
-- **Runtime**: AWS EKS (Kubernetes).
-- **Deployment**: Helm charts for provisioning workers and identity gateways.
-- **IaC**: Terraform (Modular with EUC Infrastructure focus).
+### Infrastructure & DevOps
+*   **Runtime**: AWS EKS or Azure Kubernetes Service (AKS).
+*   **Networking**: Azure Network Connections (ANC) for direct VNet injection of Cloud PCs.
+*   **IaC**: Modular Terraform for deploying the EUC hub and hybrid networking distributions.
+
+---
+
+## 🏗️ IaC Mapping (Module Structure)
+
+| Module | Purpose | Real Services |
+| :--- | :--- | :--- |
+| **`infrastructure/euc_hub`** | Central management plane | EKS, PostgreSQL, Redis |
+| **`infrastructure/networking`** | Hybrid connectivity fabric | VNet, VPN, ExpressRoute |
+| **`infrastructure/storage`** | Profile & Data Roaming | Azure Files, FSLogix |
+| **`infrastructure/governance`** | Intune & CA Policies | Intune, Entra ID |
 
 ---
 
 ## 🚀 Deployment Guide
 
-### Local Development
+### Local Principal Environment
 ```bash
-# Clone the repository
+# Clone the EUC platform
 git clone https://github.com/devopstrio/windows-365-hybrid.git
 cd windows-365-hybrid
 
-# Setup environment
+# Configure environment
 cp .env.example .env
 
-# Launch the Hybrid stack (API, Engines, DB, Redis, UI)
+# Launch the EUC stack
 make up
 
-# Sync Identity objects (AD -> AAD)
-make sync
-
-# Provision initial Cloud PCs
-make provision
-
-# Validate workplace architecture
-make test
+# Trigger a mock identity sync and device provisioning simulation
+make simulate-provision
 ```
+
 Access the Hybrid Dashboard at `http://localhost:3000`.
 
 ---
 
 ## 📜 License
 Distributed under the MIT License. See `LICENSE` for more information.
+
+---
+<div align="center">
+  <p>© 2026 Devopstrio. All rights reserved.</p>
+</div>
