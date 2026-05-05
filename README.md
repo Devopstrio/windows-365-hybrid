@@ -38,358 +38,84 @@ This platform provides the **Hybrid Workspace Intelligence Plane**. It implement
 
 ---
 
-## 📐 Architecture Storytelling: 50+ Advanced Diagrams
+## 📐 High-Level Reference Architecture
 
-### 1. The Workspace-as-Code Loop
-*The flow from identity sync to secure hybrid endpoint delivery.*
+### Enterprise Windows 365 Hybrid Integration
+
+**Business Purpose:**  
+Provides a secure, fully-managed End-User Computing (EUC) platform that integrates Windows 365 Cloud PCs with on-premises infrastructure. It enforces Zero Trust conditional access, centralizes device governance via Intune, and automates infrastructure delivery through Terraform.
+
 ```mermaid
 graph TD
-    subgraph "Phase 1: Identity"
-        AD[Local AD]
-        Sync[AD Connect]
-        AAD[Azure AD / Entra]
+    subgraph "DevOps & IaC"
+        GitHub[GitHub Actions / Repos]
+        Terraform[Terraform / Bicep Modules]
+        GitHub --> Terraform
     end
 
-    subgraph "Phase 2: Provisioning"
-        Assign[License Assignment]
-        CPC[Cloud PC Engine]
-        Image[Custom Image Hub]
+    subgraph "Identity & Access"
+        AD[On-Premises Active Directory]
+        ADConnect[Entra ID Connect]
+        Entra[Microsoft Entra ID]
+        AD -->|Sync| ADConnect
+        ADConnect --> Entra
     end
 
-    subgraph "Phase 3: Management"
-        Intune[Intune Policy]
-        Conf[Config Profiles]
-        Apps[App Delivery]
+    subgraph "Networking & Edge"
+        ExpressRoute[ExpressRoute / VPN Gateway]
+        HubVNet[Hybrid Virtual Network]
+        ExpressRoute --> HubVNet
     end
 
-    subgraph "Phase 4: Operations"
-        Mon[UX Monitoring]
-        Cost[Cost Modeler]
-        Dash[Ops Dashboard]
+    subgraph "Compute & Platform (EUC)"
+        Intune[Microsoft Intune / Endpoint Manager]
+        W365[Windows 365 Enterprise Cloud PCs]
+        W365 -->|Network Injection| HubVNet
+        Intune -.->|MDM / Profiles| W365
     end
 
-    AD -->|1. Sync| Sync
-    Sync -->|2. Bridge| AAD
-    AAD -->|3. Trigger| Assign
-    Assign -->|4. Deploy| CPC
-    CPC -->|5. Enroll| Intune
-    Intune -->|6. Configure| Conf
-    Conf -->|7. Deliver| Apps
-    Apps -->|8. Profile| Mon
-    Mon -->|9. Audit| Cost
-    Cost -->|10. Visualize| Dash
+    subgraph "Data Layer"
+        AzFiles[(Azure Files / FSLogix)]
+        OneDrive[(OneDrive for Business)]
+        W365 -->|Profile Roaming| AzFiles
+        W365 -->|User Data| OneDrive
+    end
+
+    subgraph "Security"
+        CondAccess[Conditional Access & MFA]
+        Defender[Defender for Endpoint]
+        Entra --> CondAccess
+        CondAccess -.->|Gating| W365
+        W365 --> Defender
+    end
+
+    subgraph "Observability"
+        EndpointAnalytics[Intune Endpoint Analytics]
+        Monitor[Azure Monitor & Log Analytics]
+        W365 -.-> EndpointAnalytics
+        W365 -.-> Monitor
+        HubVNet -.-> Monitor
+    end
+
+    Terraform -.-> HubVNet
+    Terraform -.-> AzFiles
+    Terraform -.-> Intune
 ```
 
-### 2. Hybrid Identity Topology
-```mermaid
-graph LR
-    Local[On-Prem Domain] --> Sync[Sync Engine]
-    Sync --> Entra[Entra ID Tenant]
-    Entra --> Joined[Hybrid Joined Devices]
-    Entra --> Managed[Cloud PCs]
-```
+**Key Components:**
+- **Hybrid Identity:** Utilizes Entra ID Connect to synchronize on-premises Active Directory accounts, enabling Hybrid Azure AD join for seamless Cloud PC authentication.
+- **Windows 365 Enterprise:** Hosts persistent, user-dedicated Cloud PCs that are directly injected into the Azure Virtual Network via Azure Network Connections (ANC).
+- **Microsoft Intune:** Centralized Mobile Device Management (MDM) plane for pushing configuration profiles, applications, and compliance policies to the Cloud PCs.
+- **Azure Files & FSLogix:** Highly available, SMB-based file storage dynamically mounting user profiles to ensure persistent experiences across ephemeral sessions if required.
+- **Conditional Access & Defender:** Enforces strict Zero-Trust gating (MFA, compliant device checks) before a user can connect, backed by real-time XDR scanning from Defender for Endpoint.
+- **ExpressRoute / VPN Gateway:** Provides the critical line-of-sight required for Cloud PCs to reach on-premises domain controllers and internal line-of-business applications.
 
-### 3. Cloud PC Provisioning Flow
-```mermaid
-graph LR
-    User[User Account] --> Policy{Assignment Policy?}
-    Policy -->|Matched| CPC[Provision Cloud PC]
-    CPC --> Net[Join VNet]
-    Net --> Intune[Intune Enrollment]
-    Intune --> Ready[Device Ready]
-```
-
-### 4. Hybrid Workplace Architecture
-```mermaid
-graph LR
-    UI[React Dashboard] --> API[FastAPI Gateway]
-    API --> Cache[(Redis Session Cache)]
-    API --> DB[(Postgres Fleet DB)]
-    API --> Engine[Provisioning Engine]
-```
-
-### 5. Deployment Topology: Regional EUC Factory
-```mermaid
-graph LR
-    Region[Cloud Region] --> Factory[EUC Factory]
-    Factory --> S1[Identity Workers]
-    Factory --> S2[Provisioning Nodes]
-    Factory --> S3[Monitoring Hub]
-    S1 --> Storage[(EFS Images)]
-```
-
-### 6. UX Performance Model
-```mermaid
-graph LR
-    User[End User] --> Lat{Latency < 50ms?}
-    Lat -->|Yes| Good[Optimal UX]
-    Lat -->|No| Warn[Check Gateway]
-    Good --> Metric[Report Success]
-```
-
-### 7. Foundation: Multi-Environment Setup
-```mermaid
-graph LR
-    F[Foun] --> M[Mult]
-```
-
-### 8. Networking: Secure Hybrid Tunnels
-```mermaid
-graph LR
-    N[Netw] --> S[Secu]
-```
-
-### 9. Component: Identity Engine
-```mermaid
-graph LR
-    C[Comp] --> I[Iden]
-```
-
-### 10. Component: Provisioning Engine
-```mermaid
-graph LR
-    C[Comp] --> P[Prov]
-```
-
-### 11. Component: Device Hub
-```mermaid
-graph LR
-    C[Comp] --> D[DevH]
-```
-
-### 12. Component: Policy Hub
-```mermaid
-graph LR
-    C[Comp] --> P[Poli]
-```
-
-### 13. Logic: AD-AAD Sync Logic
-```mermaid
-graph LR
-    L[Logi] --> Sync[Sync]
-```
-
-### 14. Logic: PC Assignment Logic
-```mermaid
-graph LR
-    L[Logi] --> Assi[Assi]
-```
-
-### 15. Logic: Compliance Checks
-```mermaid
-graph LR
-    L[Logi] --> Comp[Comp]
-```
-
-### 16. Logic: Performance Profiling
-```mermaid
-graph LR
-    L[Logi] --> Perf[Perf]
-```
-
-### 17. Architecture: Global Control Plane
-```mermaid
-graph LR
-    A[Arch] --> G[Glob]
-```
-
-### 18. Architecture: Workplace Mesh
-```mermaid
-graph LR
-    A[Arch] --> W[Work]
-```
-
-### 19. Architecture: Multi-Sink Reporting
-```mermaid
-graph LR
-    A[Arch] --> M[Mult]
-```
-
-### 20. Pattern: Workspace-as-Code
-```mermaid
-graph LR
-    P[Patt] --> W[Work]
-```
-
-### 21. Pattern: Immutable Target Zones
-```mermaid
-graph LR
-    P[Patt] --> I[Immu]
-```
-
-### 22. Pattern: Automated Provisioning
-```mermaid
-graph LR
-    P[Patt] --> A[Auto]
-```
-
-### 23. Security: Signed Device Artifacts
-```mermaid
-graph LR
-    S[Secu] --> S[Sign]
-```
-
-### 24. Security: RBAC Access Controls
-```mermaid
-graph LR
-    S[Secu] --> R[RBAC]
-```
-
-### 25. Security: Secure Audit Record
-```mermaid
-graph LR
-    S[Secu] --> S[Secu]
-```
-
-### 26. Feature: Fleet Heatmap UI
-```mermaid
-graph LR
-    F[Feat] --> F[Flee]
-```
-
-### 27. Feature: Real-time Velocity Tailing
-```mermaid
-graph LR
-    F[Feat] --> R[Real]
-```
-
-### 28. Feature: Auto-generated PCAPs
-```mermaid
-graph LR
-    F[Feat] --> A[Auto]
-```
-
-### 29. Compliance: NIST Workspace Audits
-```mermaid
-graph LR
-    C[Comp] --> N[NIST]
-```
-
-### 30. Compliance: Audit Trail Persistence
-```mermaid
-graph LR
-    C[Comp] --> A[Audi]
-```
-
-### 31. Infrastructure: Redis State Cache
-```mermaid
-graph LR
-    I[Infr] --> R[Redi]
-```
-
-### 32. Infrastructure: Postgres Fleet DB
-```mermaid
-graph LR
-    I[Infr] --> P[Post]
-```
-
-### 33. Deployment: Kubernetes Workspace Pods
-```mermaid
-graph LR
-    D[Depl] --> K[Kube]
-```
-
-### 34. Deployment: Multi-Region Wave Sync
-```mermaid
-graph LR
-    D[Depl] --> M[Mult]
-```
-
-### 35. Monitoring: provisioning velocity KPI
-```mermaid
-graph LR
-    M[Moni] --> P[Prov]
-```
-
-### 36. Monitoring: device compliance KPI
-```mermaid
-graph LR
-    M[Moni] --> D[DevC]
-```
-
-### 37. UI: Unified Workspace Dashboard
-```mermaid
-graph LR
-    U[UI] --> U[Unif]
-```
-
-### 38. UI: Identity Hub UI
-```mermaid
-graph LR
-    U[UI] --> I[Iden]
-```
-
-### 39. UI: ROI View
-```mermaid
-graph LR
-    U[UI] --> R[ROIV]
-```
-
-### 40. UI: Readiness Heatmap
-```mermaid
-graph LR
-    U[UI] --> R[Read]
-```
-
-### 41. CI/CD: Wave validation pipeline
-```mermaid
-graph LR
-    C[CICD] --> W[Wave]
-```
-
-### 42. CI/CD: Provisioning engine tests
-```mermaid
-graph LR
-    C[CICD] --> P[Prov]
-```
-
-### 43. Strategy: Hybrid-First Foundation
-```mermaid
-graph LR
-    S[Stra] --> H[Hybr]
-```
-
-### 44. Strategy: Data-Driven Workplace
-```mermaid
-graph LR
-    S[Stra] --> D[Data]
-```
-
-### 45. Feature: Multi-Cloud Search Bridge
-```mermaid
-graph LR
-    F[Feat] --> M[Mult]
-```
-
-### 46. Feature: Real-time Outage Alerts
-```mermaid
-graph LR
-    F[Feat] --> R[Real]
-```
-
-### 47. Feature: UX Forecasting
-```mermaid
-graph LR
-    F[Feat] --> U[UXFo]
-```
-
-### 48. Logic: Cost Comparison Engine
-```mermaid
-graph LR
-    L[Logi] --> C[Cost]
-```
-
-### 49. Data Model: Fleet Task Entity
-```mermaid
-graph LR
-    D[Data] --> F[Flee]
-```
-
-### 50. Enterprise Workplace Excellence
-```mermaid
-graph LR
-    E[Entr] --> E[Work]
-```
+**How this maps to IaC:**
+- **`module.network`:** Provisions the Azure Virtual Network, Subnets, Network Security Groups, and VPN/ExpressRoute Gateways required for ANC.
+- **`module.identity`:** Configures Azure AD Domain Services or facilitates Hybrid network routing for AD Connect synchronizations.
+- **`module.w365`:** Defines the Windows 365 Provisioning Policies, Azure Network Connections, and assigns user licenses.
+- **`module.intune`:** Automates the deployment of Intune compliance policies, configuration profiles, and application assignments via Microsoft Graph API.
+- **`module.storage`:** Provisions the Azure Storage Account and Azure Files share with AD integration for FSLogix profile containers.
 
 ---
 
